@@ -1,16 +1,21 @@
 // Obtener ayuda sobre metodos del response
-const { response } = require('express')
+const { response, request } = require('express')
 
 // Indicamos que res es el response (para tener las ayudas de los métodos que ofrece). 
 // Esto no es necesario, pero ayuda a la codificación
-const crearUsuario = (req, res = response) => {
+const crearUsuario = (req = request, res = response) => {
+    // Recuperar información enviada en el cuerpo de la petición
+    const { name, email, password } = req.body;
+    console.log(name, email, password);
     return res.json({
         ok: true,
         msg: 'Crear usuario /new'
     })
 }
 
-const login = (req, res) => {
+const login = (req = request, res) => {
+    const { email, password } = req.body
+    console.log(email, password);
     res.json({
         ok: true,
         msg: 'Login de usuario /',

@@ -1,8 +1,13 @@
 // Importación de paquetes
 const express = require('express');
+const cors = require('cors');
 
 // Inicializar servidor express
 const app = express();
+
+// Middlewares
+app.use(cors());                // habilitar CORS
+app.use(express.json());        // lectura y parseo de información que viaje en el cuerpo de la petición (body)
 
 // Importar Rutas
 app.use('/api/auth', require('./routes/auth'));
