@@ -1,7 +1,11 @@
 // Importación de paquetes
 const express = require('express');
 const cors = require('cors');
+const { dbConnection } = require('./database/config');
 require('dotenv').config();     // Configurar y registrar nuestro archivo local de variables de entorno (a las variables de entorno globales de NODE)
+
+// Conexión a la base de datos
+dbConnection()
 
 // Inicializar servidor express
 const app = express();
