@@ -6,6 +6,9 @@ require('dotenv').config();     // Configurar y registrar nuestro archivo local 
 // Inicializar servidor express
 const app = express();
 
+// Directorio con recursos publicos
+app.use(express.static('public'));
+
 // Middlewares
 app.use(cors());                // habilitar CORS
 app.use(express.json());        // lectura y parseo de información que viaje en el cuerpo de la petición (body)
