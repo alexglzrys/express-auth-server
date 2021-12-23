@@ -1,5 +1,6 @@
 // Obtener ayuda sobre metodos del response
-const { response, request } = require('express')
+const { response, request } = require('express');
+const { validationResult } = require('express-validator');
 
 // Indicamos que res es el response (para tener las ayudas de los métodos que ofrece). 
 // Esto no es necesario, pero ayuda a la codificación
@@ -13,7 +14,19 @@ const crearUsuario = (req = request, res = response) => {
     })
 }
 
-const login = (req = request, res) => {
+const loginUsuario = (req = request, res = response) => {
+
+    // Atrapar los errores encontrados por el middleware de express-validator
+    const errors = validationResult(req);
+    
+    // Si hay errores, notificar al usuario mapeando los errores encontrados como respuesta
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            ok: false,
+            errors: errors.mapped()
+        })
+    }
+
     const { email, password } = req.body
     console.log(email, password);
     res.json({
@@ -32,6 +45,6 @@ const renovarToken = (req, res) => {
 // Exportar información concreta de este módulo
 module.exports = {
     crearUsuario,
-    login,
+    loginUsuario,
     renovarToken
 }
