@@ -5,6 +5,7 @@ const { validationResult } = require('express-validator');
 // Indicamos que res es el response (para tener las ayudas de los métodos que ofrece). 
 // Esto no es necesario, pero ayuda a la codificación
 const crearUsuario = (req = request, res = response) => {
+   
     // Recuperar información enviada en el cuerpo de la petición
     const { name, email, password } = req.body;
     console.log(name, email, password);
@@ -16,16 +17,16 @@ const crearUsuario = (req = request, res = response) => {
 
 const loginUsuario = (req = request, res = response) => {
 
-    // Atrapar los errores encontrados por el middleware de express-validator
-    const errors = validationResult(req);
+    // // Atrapar los errores encontrados por el middleware de express-validator
+    // const errors = validationResult(req);
     
-    // Si hay errores, notificar al usuario mapeando los errores encontrados como respuesta
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            ok: false,
-            errors: errors.mapped()
-        })
-    }
+    // // Si hay errores, notificar al usuario mapeando los errores encontrados como respuesta
+    // if (!errors.isEmpty()) {
+    //     return res.status(400).json({
+    //         ok: false,
+    //         errors: errors.mapped()
+    //     })
+    // }
 
     const { email, password } = req.body
     console.log(email, password);
