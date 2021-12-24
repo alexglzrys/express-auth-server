@@ -1,5 +1,6 @@
 // Obtener ayuda sobre metodos del response
 const { response, request } = require('express');
+const bcrypt = require('bcryptjs')
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
 
@@ -24,6 +25,10 @@ const crearUsuario = async(req = request, res = response) => {
         
         // Crear una instancia de mi modelo de User con los datos del nuevo usuario a registrar
         const dbUser = new User(req.body);
+
+        // Hashear contraseña
+        const salt = bcrypt.genSaltSync();
+        dbUser.password = bcrypt.hashSync(password, salt)
 
         // Registrar usuario en base de datos
         await dbUser.save()
