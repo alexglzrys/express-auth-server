@@ -128,6 +128,7 @@ const renovarToken = async(req = request, res = response) => {
             ok: true,
             msg: 'Generar un nuevo token de usuario /renew',
             name: fig_name,
+            uid: fig_uid,
             token
         })
     } catch (error) {
