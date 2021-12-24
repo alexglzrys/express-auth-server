@@ -111,11 +111,31 @@ const loginUsuario = async(req = request, res = response) => {
    
 }
 
-const renovarToken = (req, res) => {
-    return res.json({
-        ok: true,
-        msg: 'Generar un nuevo token de usuario /renew'
-    })
+const renovarToken = async(req = request, res = response) => {
+    // La intensión de este método es ejecutarlo cada vez que el usuario solicite
+    // algo en el servidor. (refresque la pantalla, una consulta, etc). La intensión es renovarlo con una nueva vigencia.
+
+    // Si llegamos a ejecutar este controlador, significa que uno de los middlewares anteriores inyectò informaciòn
+    // del usuario en la peticiòn.
+    const { fig_uid, fig_name } = req;
+
+    try {
+        // Generar un nuevo JWT con base a los datos parciales del usuaro (uid, name)
+        const token = await generateJWT(fig_uid, fig_name);
+
+        return res.json({
+            ok: true,
+            msg: 'Generar un nuevo token de usuario /renew',
+            name: fig_name,
+            token
+        })
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: 'Error interno en el servidor',
+        })
+    }
+    
 }
 
 // Exportar información concreta de este módulo
