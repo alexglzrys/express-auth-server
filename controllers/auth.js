@@ -3,6 +3,7 @@ const { response, request } = require('express');
 const bcrypt = require('bcryptjs')
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
+const { generateJWT } = require('../helpers/jwt');
 
 // Indicamos que res es el response (para tener las ayudas de los métodos que ofrece). 
 // Esto no es necesario, pero ayuda a la codificación
@@ -30,6 +31,9 @@ const crearUsuario = async(req = request, res = response) => {
         const salt = bcrypt.genSaltSync();
         dbUser.password = bcrypt.hashSync(password, salt)
 
+        // Generar JWT
+        const token = await generateJWT(dbUser.id, name)
+
         // Registrar usuario en base de datos
         await dbUser.save()
 
@@ -37,7 +41,8 @@ const crearUsuario = async(req = request, res = response) => {
         return res.status(201).json({
             ok: true,
             uid: dbUser.id,
-            name
+            name,
+            token
         })
 
     } catch (error) {
