@@ -55,7 +55,7 @@ const crearUsuario = async(req = request, res = response) => {
     
 }
 
-const loginUsuario = (req = request, res = response) => {
+const loginUsuario = async(req = request, res = response) => {
 
     // // Atrapar los errores encontrados por el middleware de express-validator
     // const errors = validationResult(req);
@@ -69,11 +69,46 @@ const loginUsuario = (req = request, res = response) => {
     // }
 
     const { email, password } = req.body
-    console.log(email, password);
-    res.json({
-        ok: true,
-        msg: 'Login de usuario /',
-    });
+    // console.log(email, password);
+
+    try {
+        // Confirmar si el email existe
+        const dbUser = await User.findOne({email});
+        if (!dbUser) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Credenciales de acceso incorrectas - Email not found',
+            });
+        }
+
+        // Confirmar si el password hace match
+        const validPassword = bcrypt.compareSync(password, dbUser.password);
+        if (!validPassword) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Credenciales de acceso incorrectas - Password invalid',
+            });
+        }
+
+        // Usuario existe, es necesario generar el JWT
+        const token = await generateJWT(dbUser.id, dbUser.name);
+
+        // Enviar respuesta al cliente
+        return res.status(200).json({
+            ok: true,
+            msg: 'Credenciales de acceso correctas',
+            name: dbUser.name,
+            token
+        });
+        
+    } catch (error) {
+        console.log(error);
+        res.json({
+            ok: false,
+            msg: 'Error interno en el servidor',
+        });
+    }
+   
 }
 
 const renovarToken = (req, res) => {
