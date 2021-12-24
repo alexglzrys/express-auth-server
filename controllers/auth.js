@@ -98,6 +98,7 @@ const loginUsuario = async(req = request, res = response) => {
             ok: true,
             msg: 'Credenciales de acceso correctas',
             name: dbUser.name,
+            uid: dbUser.id,
             token
         });
         
