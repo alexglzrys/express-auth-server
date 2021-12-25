@@ -124,7 +124,7 @@ const renovarToken = async(req = request, res = response) => {
 
     try {
         // Generar un nuevo JWT con base a los datos parciales del usuaro (uid, name)
-        const token = await generateJWT(fig_uid, fig_name);
+        const token = await generateJWT(fig_uid, fig_name, fig_email);
 
         return res.json({
             ok: true,
