@@ -32,7 +32,7 @@ const crearUsuario = async(req = request, res = response) => {
         dbUser.password = bcrypt.hashSync(password, salt)
 
         // Generar JWT
-        const token = await generateJWT(dbUser.id, name, email)
+        const token = await generateJWT(dbUser.id, name)
 
         // Registrar usuario en base de datos
         await dbUser.save()
@@ -120,17 +120,20 @@ const renovarToken = async(req = request, res = response) => {
 
     // Si llegamos a ejecutar este controlador, significa que uno de los middlewares anteriores inyectò informaciòn
     // del usuario en la peticiòn.
-    const { fig_uid, fig_name, fig_email } = req;
+    const { fig_uid, fig_name } = req;
 
     try {
         // Generar un nuevo JWT con base a los datos parciales del usuaro (uid, name)
-        const token = await generateJWT(fig_uid, fig_name, fig_email);
+        const token = await generateJWT(fig_uid, fig_name);
 
+        // Me interesa enviar el email del usuario en la respuesta, por tanto, hago la consulta desde la BD
+        const dbUser = await User.findById(fig_uid);
+        
         return res.json({
             ok: true,
             msg: 'Generar un nuevo token de usuario /renew',
             name: fig_name,
-            email: fig_email,
+            email: dbUser.email,
             uid: fig_uid,
             token
         })

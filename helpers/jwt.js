@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 
-const generateJWT = (uid, name, email) => {
-    const payload = { uid, name, email };
+const generateJWT = (uid, name) => {
+    const payload = { uid, name };
 
     // Genero una promesa, ya que este paquete aun trabaja con callbacks y rompe la metodologia de trabajo para este proyecto
     return new Promise((resolve, reject) => {
