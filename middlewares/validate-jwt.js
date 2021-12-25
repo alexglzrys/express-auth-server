@@ -23,6 +23,7 @@ const validateJWT = (req = request, res = response, next) => {
         // Para ello inyectamos informaciòn en la peticiòn (request)
         req.fig_uid = infoToken.uid;
         req.fig_name = infoToken.name;
+        req.fig_email = infoToken.email;
 
     } catch (error) {
         return res.status(401).json({
